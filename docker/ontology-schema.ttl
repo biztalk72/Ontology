@@ -1,0 +1,300 @@
+# OWL Ontology Schema for Protege Compatibility
+# File: ontology-schema.ttl
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix onto: <http://ontology.studio/ontology#> .
+@prefix data: <http://ontology.studio/data#> .
+
+# ========== ONTOLOGY DEFINITIONS ==========
+
+# Ontology metadata
+<http://ontology.studio/ontology>
+    a owl:Ontology ;
+    rdfs:comment "Ontology Studio Domain Ontology"@en ;
+    rdfs:label "Ontology Studio"@en .
+
+# ========== CLASS DEFINITIONS ==========
+
+# Base Class: Ontology Entity
+onto:Entity a owl:Class ;
+    rdfs:label "Entity"@en ;
+    rdfs:comment "Base class for all ontology entities"@en .
+
+# Node Types
+onto:Node a owl:Class ;
+    rdfs:subClassOf onto:Entity ;
+    rdfs:label "Node"@en ;
+    rdfs:comment "Represents a node in the ontology graph"@en .
+
+onto:Context a owl:Class ;
+    rdfs:subClassOf onto:Node ;
+    rdfs:label "Context"@en ;
+    rdfs:comment "Context node representing domain context or category"@en .
+
+onto:Field a owl:Class ;
+    rdfs:subClassOf onto:Node ;
+    rdfs:label "Field"@en ;
+    rdfs:comment "Field node representing data field or property"@en .
+
+onto:Request a owl:Class ;
+    rdfs:subClassOf onto:Node ;
+    rdfs:label "Request"@en ;
+    rdfs:comment "Request node representing query or operation"@en .
+
+onto:Output a owl:Class ;
+    rdfs:subClassOf onto:Node ;
+    rdfs:label "Output"@en ;
+    rdfs:comment "Output node representing result or report"@en .
+
+# Edge Types
+onto:Edge a owl:Class ;
+    rdfs:subClassOf onto:Entity ;
+    rdfs:label "Edge"@en ;
+    rdfs:comment "Represents a relationship between two nodes"@en .
+
+# Branch (Store) Class
+onto:Branch a owl:Class ;
+    rdfs:subClassOf onto:Context ;
+    rdfs:label "Branch"@en ;
+    rdfs:comment "Retail store branch location"@en .
+
+# Category Classes
+onto:ProductCategory a owl:Class ;
+    rdfs:subClassOf onto:Context ;
+    rdfs:label "Product Category"@en ;
+    rdfs:comment "Product category classification"@en .
+
+onto:SubCategory a owl:Class ;
+    rdfs:subClassOf onto:Context ;
+    rdfs:label "Sub Category"@en ;
+    rdfs:comment "Product sub-category classification"@en .
+
+# Brand Class
+onto:Brand a owl:Class ;
+    rdfs:subClassOf onto:Context ;
+    rdfs:label "Brand"@en ;
+    rdfs:comment "Product brand or manufacturer"@en .
+
+# SKU Class
+onto:SKU a owl:Class ;
+    rdfs:subClassOf onto:Field ;
+    rdfs:label "SKU (Stock Keeping Unit)"@en ;
+    rdfs:comment "Product stock keeping unit identifier"@en .
+
+# ========== PROPERTY DEFINITIONS ==========
+
+# Node Properties
+onto:nodeId a owl:DatatypeProperty ;
+    rdfs:domain onto:Node ;
+    rdfs:range xsd:string ;
+    rdfs:label "Node ID"@en ;
+    rdfs:comment "Unique identifier for a node"@en .
+
+onto:nodeName a owl:DatatypeProperty ;
+    rdfs:domain onto:Node ;
+    rdfs:range xsd:string ;
+    rdfs:label "Node Name"@en ;
+    rdfs:comment "Display name of the node"@en .
+
+onto:nodeType a owl:DatatypeProperty ;
+    rdfs:domain onto:Node ;
+    rdfs:range xsd:string ;
+    rdfs:label "Node Type"@en ;
+    rdfs:comment "Type of the node (field, context, request, output)"@en .
+
+onto:nodeDescription a owl:DatatypeProperty ;
+    rdfs:domain onto:Node ;
+    rdfs:range xsd:string ;
+    rdfs:label "Node Description"@en ;
+    rdfs:comment "Description of the node"@en .
+
+# Branch Properties
+onto:branchId a owl:DatatypeProperty ;
+    rdfs:domain onto:Branch ;
+    rdfs:range xsd:string ;
+    rdfs:label "Branch ID"@en ;
+    rdfs:comment "Unique branch identifier (e.g., ST001)"@en .
+
+onto:branchLocation a owl:DatatypeProperty ;
+    rdfs:domain onto:Branch ;
+    rdfs:range xsd:string ;
+    rdfs:label "Branch Location"@en ;
+    rdfs:comment "Geographic location of the branch"@en .
+
+onto:branchGrade a owl:DatatypeProperty ;
+    rdfs:domain onto:Branch ;
+    rdfs:range xsd:string ;
+    rdfs:label "Branch Grade"@en ;
+    rdfs:comment "Store size grade (Large, Medium, Small)"@en .
+
+onto:branchArea a owl:DatatypeProperty ;
+    rdfs:domain onto:Branch ;
+    rdfs:range xsd:double ;
+    rdfs:label "Branch Area"@en ;
+    rdfs:comment "Store area in square meters"@en .
+
+# SKU Properties
+onto:skuId a owl:DatatypeProperty ;
+    rdfs:domain onto:SKU ;
+    rdfs:range xsd:string ;
+    rdfs:label "SKU ID"@en ;
+    rdfs:comment "Stock keeping unit identifier"@en .
+
+onto:skuName a owl:DatatypeProperty ;
+    rdfs:domain onto:SKU ;
+    rdfs:range xsd:string ;
+    rdfs:label "SKU Name"@en ;
+    rdfs:comment "Product name"@en .
+
+onto:skuPrice a owl:DatatypeProperty ;
+    rdfs:domain onto:SKU ;
+    rdfs:range xsd:double ;
+    rdfs:label "SKU Price"@en ;
+    rdfs:comment "Product selling price"@en .
+
+onto:skuCost a owl:DatatypeProperty ;
+    rdfs:domain onto:SKU ;
+    rdfs:range xsd:double ;
+    rdfs:label "SKU Cost"@en ;
+    rdfs:comment "Product cost price"@en .
+
+onto:skuMargin a owl:DatatypeProperty ;
+    rdfs:domain onto:SKU ;
+    rdfs:range xsd:double ;
+    rdfs:label "SKU Margin"@en ;
+    rdfs:comment "Product margin percentage"@en .
+
+# Relationship Properties
+onto:edgeId a owl:DatatypeProperty ;
+    rdfs:domain onto:Edge ;
+    rdfs:range xsd:string ;
+    rdfs:label "Edge ID"@en ;
+    rdfs:comment "Unique identifier for an edge"@en .
+
+onto:source a owl:ObjectProperty ;
+    rdfs:domain onto:Edge ;
+    rdfs:range onto:Node ;
+    rdfs:label "Source"@en ;
+    rdfs:comment "Source node of the edge"@en .
+
+onto:target a owl:ObjectProperty ;
+    rdfs:domain onto:Edge ;
+    rdfs:range onto:Node ;
+    rdfs:label "Target"@en ;
+    rdfs:comment "Target node of the edge"@en .
+
+onto:label a owl:DatatypeProperty ;
+    rdfs:domain onto:Edge ;
+    rdfs:range xsd:string ;
+    rdfs:label "Label"@en ;
+    rdfs:comment "Label for the edge relationship"@en .
+
+# ========== RELATIONSHIP DEFINITIONS ==========
+
+# Branch sells Category
+onto:sells a owl:ObjectProperty ;
+    rdfs:domain onto:Branch ;
+    rdfs:range onto:ProductCategory ;
+    rdfs:label "Sells"@en ;
+    rdfs:comment "Branch sells products in this category"@en .
+
+# Category contains SubCategory
+onto:contains a owl:ObjectProperty ;
+    rdfs:domain onto:ProductCategory ;
+    rdfs:range onto:SubCategory ;
+    rdfs:label "Contains"@en ;
+    rdfs:comment "Category contains sub-category"@en .
+
+# SKU manufactured by Brand
+onto:manufacturedBy a owl:ObjectProperty ;
+    rdfs:domain onto:SKU ;
+    rdfs:range onto:Brand ;
+    rdfs:label "Manufactured By"@en ;
+    rdfs:comment "SKU is manufactured by this brand"@en .
+
+# SKU belongs to Category
+onto:belongsTo a owl:ObjectProperty ;
+    rdfs:domain onto:SKU ;
+    rdfs:range onto:ProductCategory ;
+    rdfs:label "Belongs To"@en ;
+    rdfs:comment "SKU belongs to this category"@en .
+
+# ========== CLASS EQUIVALENCE ==========
+
+# Branch equivalent to retail store context
+onto:Branch owl:equivalentClass [
+    a owl:Class ;
+    owl:intersectionOf (
+        onto:Context
+        [ a owl:Restriction ;
+          owl:onProperty onto:branchId ;
+          owl:someValuesFrom xsd:string ]
+    )
+] .
+
+# ========== INDIVIDUALS (SAMPLE DATA) ==========
+
+# Sample Branches
+data:ST001 a onto:Branch ;
+    onto:branchId "ST001" ;
+    onto:nodeName "강남점" ;
+    onto:branchLocation "서울" ;
+    onto:branchGrade "대형" ;
+    onto:branchArea 1500.0 .
+
+data:ST002 a onto:Branch ;
+    onto:branchId "ST002" ;
+    onto:nodeName "부산해운대점" ;
+    onto:branchLocation "부산" ;
+    onto:branchGrade "중형" ;
+    onto:branchArea 1200.0 .
+
+# Sample Categories
+data:Category_Electronics a onto:ProductCategory ;
+    onto:nodeName "전자제품" ;
+    onto:nodeDescription "Electronic products category" .
+
+data:Category_Clothing a onto:ProductCategory ;
+    onto:nodeName "의류/패션" ;
+    onto:nodeDescription "Clothing and fashion category" .
+
+# Sample SKU
+data:SKU00001 a onto:SKU ;
+    onto:skuId "SKU00001" ;
+    onto:nodeName "노트북 A브랜드 001" ;
+    onto:skuPrice 114670.0 ;
+    onto:skuCost 46980.0 ;
+    onto:skuMargin 59.0 .
+
+# ========== INFERENCE RULES ==========
+
+# Transitive property for hierarchy
+onto:contains owl:propertyChainAxiom ( onto:contains onto:contains ) .
+
+# ========== CONSTRAINTS ==========
+
+# Node must have an ID
+[
+    a owl:Restriction ;
+    owl:onProperty onto:nodeId ;
+    owl:someValuesFrom xsd:string ;
+    owl:onClass onto:Node
+] .
+
+# Edge must connect two nodes
+[
+    a owl:Restriction ;
+    owl:onProperty onto:source ;
+    owl:someValuesFrom onto:Node ;
+    owl:onClass onto:Edge
+] .
+
+[
+    a owl:Restriction ;
+    owl:onProperty onto:target ;
+    owl:someValuesFrom onto:Node ;
+    owl:onClass onto:Edge
+] .
