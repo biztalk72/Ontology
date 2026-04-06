@@ -1,0 +1,11 @@
+Step,Action,Expected Result
+1,Open the application in a browser,The application loads with light mode by default (if system preference is light) or dark mode (if system preference is dark)
+2,Change system appearance to Dark Mode (macOS: System Settings > General > Appearance > Dark),Refresh the page,The application background changes to dark (#0D1117), text becomes light (#F0F6FC), accent colors adjust accordingly
+3,Change system appearance to Light Mode (macOS: System Settings > General > Appearance > Light),Refresh the page,The application background changes to light (#ffffff), text becomes dark (#08060d), accent colors adjust accordingly
+4,Toggle the Info Panel by clicking a node,The Info Panel appears with appropriate dark/light theme based on system preference
+5,Open the QUESTION panel (right side),The panel displays with correct theme colors
+6,Open the chat panel at bottom,The chat panel displays with correct theme colors
+7,Hover over nodes and edges,Hover effects and highlights are visible with appropriate contrast
+8,Resize browser window to mobile width (<1024px),Layout adjusts and colors remain consistent with theme
+9,Execute a SPARQL query via the QUESTION panel (e.g., connect node1 to node2),The command executes and the new edge appears with correct styling
+10,Access the history in the QUESTION panel and switch between text and JSON view,History displays correctly in both formats with proper theme
