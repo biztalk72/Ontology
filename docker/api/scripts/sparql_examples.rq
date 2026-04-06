@@ -1,0 +1,66 @@
+# SPARQL Query Examples for Ontology Studio
+
+# Example 1: Get all branches
+PREFIX onto: <http://ontology.studio/ontology#>
+PREFIX data: <http://ontology.studio/data#>
+
+SELECT ?branchId ?name ?location ?grade
+WHERE {
+    ?branch a onto:Branch ;
+            onto:nodeId ?branchId ;
+            onto nodeName ?name ;
+            onto:branchLocation ?location ;
+            onto:branchGrade ?grade .
+}
+
+# Example 2: Get SKUs in a specific category
+PREFIX onto: <http://ontology.studio/ontology#>
+PREFIX data: <http://ontology.studio/data#>
+
+SELECT ?skuId ?name ?price
+WHERE {
+    ?sku a onto:SKU ;
+         onto:nodeId ?skuId ;
+         onto nodeName ?name ;
+         onto:skuPrice ?price .
+}
+
+# Example 3: Find branches selling specific category
+PREFIX onto: <http://ontology.studio/ontology#>
+PREFIX data: <http://ontology.studio/data#>
+
+SELECT ?branch ?category
+WHERE {
+    ?rel a onto:SalesRelation ;
+         onto:source ?branch ;
+         onto:target ?category .
+    ?branch a onto:Branch .
+    ?category onto nodeName "전자제품" .
+}
+
+# Example 4: Get node connections (graph query)
+PREFIX onto: <http://ontology.studio/ontology#>
+PREFIX data: <http://ontology.studio/data#>
+
+CONSTRUCT {
+    ?source ?rel ?target .
+}
+WHERE {
+    ?rel onto:source ?source ;
+         onto:target ?target .
+}
+
+# Example 5: Complex query - Branch sales summary
+PREFIX onto: <http://ontology.studio/ontology#>
+PREFIX data: <http://ontology.studio/data#>
+
+SELECT ?branch ?branchName (COUNT(?sku) as ?skuCount) (SUM(?price) as ?totalPrice)
+WHERE {
+    ?branch a onto:Branch ;
+            onto:nodeName ?branchName .
+    ?sku onto:belongsTo ?category .
+    ?rel onto:source ?branch ;
+         onto:target ?category .
+    ?sku onto:skuPrice ?price .
+}
+GROUP BY ?branch ?branchName

@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  # Graph Database (Apache Jena Fuseki)
+  fuseki:
+    image: stain/jena-fuseki:4.10.0
+    container_name: ontology-fuseki
+    ports:
+      - "3030:3030"
+    environment:
+      - ADMIN_PASSWORD=admin123
+      - FUSEKI_DATASET_1=ontology
+      - FUSEKI_DATASET_1_TYPE=tdb2
+    volumes:
+      - ./fuseki-data:/fuseki-data
+      - ./ontology:/ontology
+    command: /bin/bash -c "mkdir -p /fuseki-data/databases/ontology && /run.sh"
+    restart: unless-stopped
+
+  # RDF Store & Triple Store (GraphDB Free)
+  graphdb:
+    image: ontotext/graphdb:10.6.3-free
+    container_name: ontology-graphdb
+    ports:
+      - "7200:7200"
+    environment:
+      - JAVA_OPTS=-Xmx2g -Xms2g
+    volumes:
+      - ./graphdb-data:/opt/graphdb/home/data
+    restart: unless-stopped
+
+  # API Server (FastAPI)
+  api:
+    build: ./api
+    container_name: ontology-api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - fuseki
+      - graphdb
+    environment:
+      - FUSEKI_URL=http://fuseki:3030
+      - GRAPHDB_URL=http://graphdb:7200
+      - DATABASE_URL=postgresql://ontology:ontology123@postgres:5432/ontology
+    volumes:
+      - ./api:/app
+    restart: unless-stopped
+
+  # PostgreSQL (Metadata Storage)
+  postgres:
+    image: postgres:15-alpine
+    container_name: ontology-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=ontology
+      - POSTGRES_USER=ontology
+      - POSTGRES_PASSWORD=ontology123
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # Redis (Cache & Session)
+  redis:
+    image: redis:7-alpine
+    container_name: ontology-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis-data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+
+  # React Frontend (Production build)
+  frontend:
+    build: ./ontology-studio
+    container_name: ontology-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    restart: unless-stopped
+
+  # Optional: Adminer for DB management
+  adminer:
+    image: adminer:latest
+    container_name: ontology-adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  fuseki-data:
+  graphdb-data:
+  postgres-data:
+  redis-data:
